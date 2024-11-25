@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+            color: white;
+        }
+        #taskList {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+            max-width: 400px;
+        }
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 10px 0;
+            padding: 15px;
+            background-color: #333;
+            border-radius: 5px;
+            word-wrap: break-word;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .task span {
+            flex-grow: 1;
+            margin-right: 10px;
+            word-wrap: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .task .time {
+            font-size: 0.9em;
+            color: #888;
+            margin-top: 12px; /* Отступ сверху */
+            margin-left: 15px; /* Отступ слева для отделения времени от кнопки */
+        }
+        button {
+            padding: 10px;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        button:hover {
+            background-color: #777;
+        }
+        /* Контейнер для поля ввода и кнопок */
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 10px;
+            align-items: center; /* Выравниваем по центру */
+        }
+        .input-container input[type="text"] {
+            padding: 10px;
+            width: 100%; /* Растягиваем поле ввода на 100% */
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center; /* Выравниваем кнопки по центру */
+            gap: 10px;
+            width: 100%;
+        }
+        
+        /* Медиазапросы для мобильных устройств */
+        @media (max-width: 400px) {
+            body {
+                padding: 10px; /* Добавляем немного отступа для мобильных устройств */
+            }
+            input[type="text"] {
+                width: 100%; /* Ширина поля ввода будет 100% */
+            }
+            .button-container {
+                flex-direction: column; /* Кнопки будут располагаться одна под другой */
+                gap: 5px; /* Уменьшаем расстояние между кнопками */
+            }
+            button {
+                width: 100%; /* Кнопки будут занимать всю ширину */
+                padding: 12px; /* Увеличим размер кнопок для удобства на мобильных устройствах */
+            }
+            .task {
+                padding: 10px; /* Уменьшаем отступы для задач на мобильных устройствах */
+            }
+            .task span {
+                font-size: 14px; /* Уменьшаем размер шрифта для текста задач */
+            }
+            .task .time {
+                font-size: 0.8em; /* Уменьшаем размер шрифта для времени */
+                margin-left: 0; /* Убираем отступ слева для времени */
+                margin-top: 8px; /* Уменьшаем отступ сверху для времени */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>To-Do List</h1>
+
+<!-- Контейнер для поля ввода и кнопки -->
+<div class="input-container">
+    <input type="text" id="taskInput" placeholder="Введите задачу">
+    <div class="button-container">
+        <button onclick="addTask()">Добавить</button>
+        <button onclick="clearAllTasks()">Очистить все</button>
+    </div>
+</div>
+
+<ul id="taskList"></ul>
+
+<script>
+    function addTask() {
+        const taskInput = document.getElementById('taskInput');
+        const taskText = taskInput.value.trim();
+        
+        if (taskText) {
+            const time = getCurrentTime(); // Получаем текущее время
+            const li = document.createElement('li');
+            li.className = 'task';
+            li.innerHTML = `
+                <span>${taskText}</span>
+                <button onclick="removeTask(this)">Удалить</button>
+                <div class="time">${time}</div>
+            `;
+            document.getElementById('taskList').appendChild(li);
+            taskInput.value = '';
+        }
+    }
+
+    function removeTask(button) {
+        const task = button.parentElement;
+        task.remove();
+    }
+
+    function clearAllTasks() {
+        const taskList = document.getElementById('taskList');
+        taskList.innerHTML = ''; // Очистить список задач
+    }
+
+    function getCurrentTime() {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
+</script>
+
+</body>
+</html>
